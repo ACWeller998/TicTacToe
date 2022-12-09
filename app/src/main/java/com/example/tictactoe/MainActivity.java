@@ -2,7 +2,6 @@ package com.example.tictactoe;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
@@ -12,19 +11,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentContainerView;
-import androidx.fragment.app.FragmentController;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.tictactoe.databinding.ActivityMainBinding;
 
-import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -38,8 +30,9 @@ public class MainActivity extends AppCompatActivity {
     private AlertDialog dialog;
 
     // Settings Buttons
-    private Chip opponentChip,chip2,chip3;
+    private Chip opponentChip,difficultyChip,chip3;
     private FloatingActionButton settingsDoneBtn;
+    boolean enabled, difficulty;
     //
 
     @Override
@@ -49,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+
+        initSettings();
         initViews();
 
         btnPlay.setOnClickListener(new View.OnClickListener() {
@@ -61,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         btnSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "IT SELECTS", Toast.LENGTH_SHORT).show();
                 createNewSettingsDialog();
             }
         });
@@ -73,6 +67,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void initSettings() {
+        //initital settings
+        enabled = true;
+        difficulty = false;
     }
 
     private void initViews() {
@@ -89,6 +89,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void switchActivities(Activity activity) {
         Intent switchActivity = new Intent(this, activity.getClass());
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("enabled",enabled);
+        bundle.putBoolean("difficulty",difficulty);
+        switchActivity.putExtras(bundle);
         startActivity(switchActivity);
     }
 
@@ -96,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         dialogBuilder = new MaterialAlertDialogBuilder(this);
         final View settingsPopupView = getLayoutInflater().inflate(R.layout.settings_fragment_layout,null);
         opponentChip = settingsPopupView.findViewById(R.id.opponentChip);
-        chip2 = settingsPopupView.findViewById(R.id.chip2);
+        difficultyChip = settingsPopupView.findViewById(R.id.difficultyChip);
         chip3 = settingsPopupView.findViewById(R.id.chip3);
         settingsDoneBtn = settingsPopupView.findViewById(R.id.settingsDoneBtn);
 
@@ -111,9 +115,26 @@ public class MainActivity extends AppCompatActivity {
                 //Define finished button here
 
 
+                determineSettings();
                 dialog.dismiss();
             }
         });
 
+        difficultyChip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                difficultyChip.setChecked(false);
+            }
+        });
     }
+
+    private void bindButtons(){
+        //binding.btnPlay.setOnClickListener();
+    }
+
+    private void determineSettings() {
+        enabled = opponentChip.isChecked();
+        difficulty = difficultyChip.isChecked();
+    }
+
 }

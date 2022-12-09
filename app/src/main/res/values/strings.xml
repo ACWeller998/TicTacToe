@@ -35,4 +35,5 @@
     <string name="ai_opponent">Ai Opponent?</string>
     <string name="done">Done</string>
     <string name="done2">Done</string>
+    <string name="hard_mode">Hard Mode?</string>
 </resources>

@@ -59,11 +59,11 @@
                 app:closeIconVisible="false" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chip2"
+                android:id="@+id/difficultyChip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checkable="true"
-                android:text="@string/option_2"
+                android:text="@string/hard_mode"
                 app:checkedIcon="@drawable/ic_check" />
 
             <com.google.android.material.chip.Chip
